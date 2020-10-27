@@ -9,4 +9,4 @@ then run performance test located in `tests` folder
 ## Sample
 
 visualise the sample run by running
-`docker run -p 80:80 -v /path/to/sample/:/usr/share/nginx/html:ro nginx:alpine`
+`docker run -p 80:80 -v /absolute/path/to/docs/:/usr/share/nginx/html:ro nginx:alpine`
