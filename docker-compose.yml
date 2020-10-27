@@ -1,0 +1,111 @@
+version: '2.4'
+
+networks:
+  default:
+
+services:
+  application:
+    image: kissy/mock-load-testing:1.2.1
+    restart: always
+    networks:
+      - default
+    ports:
+      - 8080:8080
+      - 9090:9090
+      - 8081:8081
+    environment:
+      - SERVER_TOMCAT_ACCEPT-COUNT=10
+      - SERVER_TOMCAT_MAX-THREADS=20
+      - DATASOURCE_EXECUTOR_POOL_SIZE=10
+      - JAVA_TOOL_OPTIONS=-XX:MaxRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0 -XX:InitialRAMPercentage=50.0
+    mem_limit: 512m
+    cpus: 2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      fr.kissy.load-testing.monitoring: true
+
+  influxdb:
+    image: influxdb:alpine
+    restart: always
+    networks:
+      - default
+    ports:
+      - 8086:8086
+    environment:
+      - INFLUXDB_DB=loadtesting
+    mem_limit: 256m
+    cpus: 2
+    healthcheck:
+      test: ["CMD", "busybox", "wget", "--spider", "-q", "http://localhost:8086/health"]
+      interval: 3s
+      timeout: 10s
+      retries: 3
+
+  telegraf:
+    image: telegraf:alpine
+    restart: always
+    depends_on:
+      influxdb:
+        condition: service_healthy
+      application:
+        condition: service_started
+    networks:
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    mem_limit: 128m
+    cpus: 2
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    depends_on:
+      influxdb:
+        condition: service_started
+    dns: 8.8.8.8
+    networks:
+      - default
+    ports:
+      - 3000:3000
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/
+    mem_limit: 128m
+    cpus: 2
+    healthcheck:
+      test: ["CMD", "busybox", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 3s
+      timeout: 10s
+      retries: 3
+
+  k6:
+    image: loadimpact/k6:latest
+    depends_on:
+      influxdb:
+        condition: service_healthy
+      application:
+        condition: service_healthy
+    networks:
+      - default
+    ports:
+      - 6565:6565
+    environment:
+      - K6_OUT=influxdb=http://influxdb:8086/loadtesting
+    volumes:
+      - ./tests:/scripts
+    mem_limit: 512m
+    cpus: 2
+    healthcheck:
+      test: [ "CMD", "busybox", "wget", "--spider", "-q", "http://localhost:6565/v1/status" ]
+      interval: 3s
+      timeout: 10s
+      retries: 3
