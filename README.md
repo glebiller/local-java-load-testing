@@ -8,5 +8,5 @@ then run performance test located in `tests` folder
 
 ## Sample
 
-visualise the sample run by running
+available [here](https://kissy.github.io/local-java-load-testing/) or visualise locally by running
 `docker run -p 80:80 -v /absolute/path/to/docs/:/usr/share/nginx/html:ro nginx:alpine`
