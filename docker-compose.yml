@@ -17,7 +17,7 @@ services:
       - SERVER_TOMCAT_ACCEPT-COUNT=10
       - SERVER_TOMCAT_MAX-THREADS=20
       - DATASOURCE_EXECUTOR_POOL_SIZE=10
-      - JAVA_TOOL_OPTIONS=-XX:MaxRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0 -XX:InitialRAMPercentage=50.0
+      - JAVA_TOOL_OPTIONS=-XX:+UseContainerSupport -XX:MaxRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0 -XX:InitialRAMPercentage=50.0 -XX:+UseG1GC
     mem_limit: 512m
     cpus: 2
     healthcheck:
@@ -74,7 +74,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Editor
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_BASIC_ENABLED=false
     volumes:

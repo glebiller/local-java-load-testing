@@ -17,7 +17,7 @@
   "gnetId": 2587,
   "graphTooltip": 2,
   "id": 1,
-  "iteration": 1603710287051,
+  "iteration": 1604757082533,
   "links": [],
   "panels": [
     {
@@ -754,48 +754,6 @@
           "tags": []
         },
         {
-          "alias": "p95",
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "/^$Measurement$/",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT percentile(\"value\", 95) FROM /^$Measurement$/ WHERE $timeFilter and value > 0 GROUP BY time($__interval) fill(none)",
-          "rawQuery": false,
-          "refId": "D",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [
-                  95
-                ],
-                "type": "percentile"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
           "alias": "p90",
           "dsType": "influxdb",
           "groupBy": [
@@ -817,7 +775,7 @@
           "policy": "default",
           "query": "SELECT percentile(\"value\", 90) FROM /^$Measurement$/ WHERE $timeFilter and value > 0 GROUP BY time($__interval) fill(none)",
           "rawQuery": false,
-          "refId": "A",
+          "refId": "D",
           "resultFormat": "time_series",
           "select": [
             [
@@ -829,9 +787,49 @@
               },
               {
                 "params": [
-                  "90"
+                  90
                 ],
                 "type": "percentile"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "med",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "/^$Measurement$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT median(\"value\") FROM /^$Measurement$/ WHERE $timeFilter and value > 0 GROUP BY time($__interval) fill(none)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "median"
               }
             ]
           ],
@@ -1442,6 +1440,133 @@
         "y": 13
       },
       "height": "50px",
+      "id": 12,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "scopedVars": {
+        "Measurement": {
+          "selected": true,
+          "text": "http_req_duration",
+          "value": "http_req_duration"
+        }
+      },
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT percentile(\"value\", 20) FROM $Measurement WHERE $timeFilter",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "thresholds": "",
+      "title": "$Measurement (p20)",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "datasource": "load-testing-influxdb",
+      "decimals": 2,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 16,
+        "y": 13
+      },
+      "height": "50px",
       "id": 15,
       "interval": null,
       "links": [],
@@ -1565,133 +1690,6 @@
       "gridPos": {
         "h": 3,
         "w": 4,
-        "x": 16,
-        "y": 13
-      },
-      "height": "50px",
-      "id": 12,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "scopedVars": {
-        "Measurement": {
-          "selected": true,
-          "text": "http_req_duration",
-          "value": "http_req_duration"
-        }
-      },
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "dsType": "influxdb",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT percentile(\"value\", 90) FROM $Measurement WHERE $timeFilter",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "thresholds": "",
-      "title": "$Measurement (p90)",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "load-testing-influxdb",
-      "decimals": 2,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "format": "ms",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
         "x": 20,
         "y": 13
       },
@@ -1757,7 +1755,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT percentile(\"value\", 95) FROM $Measurement WHERE $timeFilter ",
+          "query": "SELECT percentile(\"value\", 90) FROM $Measurement WHERE $timeFilter ",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1779,7 +1777,7 @@
         }
       ],
       "thresholds": "",
-      "title": "$Measurement (p95)",
+      "title": "$Measurement (p90)",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1855,9 +1853,9 @@
         {
           "alias": "Throttle time",
           "color": "#FF9830",
-          "yaxis": 2,
+          "fill": 6,
           "linewidth": 0,
-          "fill": 6
+          "yaxis": 2
         },
         {
           "alias": "Usage",
@@ -2319,13 +2317,6 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "scopedVars": {
-        "Container": {
-          "selected": true,
-          "text": "performance-testing_application_1",
-          "value": "performance-testing_application_1"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "JVM Heap Limit",
@@ -2551,13 +2542,6 @@
       "pointradius": 1,
       "points": false,
       "renderer": "flot",
-      "scopedVars": {
-        "Container": {
-          "selected": true,
-          "text": "performance-testing_application_1",
-          "value": "performance-testing_application_1"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "/.* Count/",
@@ -2770,13 +2754,6 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "scopedVars": {
-        "Container": {
-          "selected": true,
-          "text": "performance-testing_application_1",
-          "value": "performance-testing_application_1"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "/.* Limit/",
@@ -2980,13 +2957,6 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "scopedVars": {
-        "Container": {
-          "selected": true,
-          "text": "performance-testing_application_1",
-          "value": "performance-testing_application_1"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "Request Count",
@@ -3196,13 +3166,6 @@
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
-      "scopedVars": {
-        "Container": {
-          "selected": true,
-          "text": "performance-testing_application_1",
-          "value": "performance-testing_application_1"
-        }
-      },
       "seriesOverrides": [
         {
           "alias": "/.* Limit/",
@@ -4048,8 +4011,8 @@
         "allValue": "All",
         "current": {
           "selected": false,
-          "text": "http://application:8778/jolokia",
-          "value": "http://application:8778/jolokia"
+          "text": "http://application:8081/actuator/jolokia",
+          "value": "http://application:8081/actuator/jolokia"
         },
         "datasource": "load-testing-influxdb",
         "definition": "",
