@@ -27,10 +27,10 @@ services:
       retries: 3
       start_period: 10s
     labels:
-      fr.kissy.load-testing.monitoring: true
+      fr.kissy.load-testing.monitoring: "true"
 
   influxdb:
-    image: influxdb:alpine
+    image: influxdb:1.8.6-alpine
     restart: always
     networks:
       - default
@@ -47,7 +47,7 @@ services:
       retries: 3
 
   telegraf:
-    image: telegraf:alpine
+    image: telegraf:1.19-alpine
     restart: always
     depends_on:
       influxdb:
@@ -63,7 +63,7 @@ services:
     cpus: 2
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:7.2.2
     restart: always
     depends_on:
       influxdb:
